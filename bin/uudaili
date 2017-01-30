@@ -1,8 +1,8 @@
-
+#!/usr/bin/env node
 var ping = require('ping');
 var fs = require('fs');
 
-fs.readFile('./urls.text', 'utf-8', function(err, data){
+fs.readFile('../urls.text', 'utf-8', function(err, data){
 	if(err){
 		console.error(err)
 	}else{
