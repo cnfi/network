@@ -1,4 +1,3 @@
-
 var ping = require('ping');
 var fs = require('fs');
 
