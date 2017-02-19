@@ -2,17 +2,35 @@
 var ping = require('ping');
 var fs = require('fs');
 var path = require('path');
+var os = require('os');
 
 fs.readFile(path.resolve(__dirname, '../urls.text'), 'utf-8', function(err, data){
 	if(err){
 		console.error(err)
 	}else{
-		var hosts = data.split('\n')
+		var p = os.platform();
+		var str = '';
+
+		if (p === 'linux') {
+	        // linux
+	    } else if (p.match(/^win/)) {
+	        // windows
+	        str = '\r\n';
+	    } else if (p === 'darwin' || p === 'freebsd') {
+	    	// mac
+	    	str = '\n';
+	    }
+
+		var hosts = data.split(str);
 
 		hosts.forEach(function (host) {
 		    ping.promise.probe(host)
 		        .then(function (res) {
-		            console.log(res.host+ ' ' + res.time + 'ms' );
+		        	if (typeof res.time === 'undefined') {
+		        		console.log(res.host+ ' Timeout!' );
+		        	} else {
+		        		console.log(res.host+ ' ' + res.time + 'ms' );
+		        	}
 		        });
 		});
 	}
