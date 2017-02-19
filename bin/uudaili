@@ -1,12 +1,26 @@
 #!/usr/bin/env node
 var ping = require('ping');
 var fs = require('fs');
+var os = require('os');
 
 fs.readFile('../urls.text', 'utf-8', function(err, data){
 	if(err){
 		console.error(err)
 	}else{
-		var hosts = data.split('\n')
+		var p = os.platform();
+		var str = '';
+
+		if (p === 'linux') {
+	        // linux
+	    } else if (p.match(/^win/)) {
+	        // windows
+	        str = '\r\n';
+	    } else if (p === 'darwin' || p === 'freebsd') {
+	    	// mac
+	    	str = '\n';
+	    }
+
+		var hosts = data.split(str);
 
 		hosts.forEach(function (host) {
 		    ping.promise.probe(host)
